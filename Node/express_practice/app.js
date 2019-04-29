@@ -29,6 +29,40 @@ app.get('/cipher', (req, res) => {
   res.send(cipherMessage);
 });
 
+app.get("/lotto", (req, res) => {
+  const queries = req.query;
+  const numbers = queries.arr.map(number => {
+    return parseInt(number);
+  })
+  
+  function randomNumberGenerator() {
+    const numberArr = []
+
+    for (let i = 0; i < 6; i++) {
+      numberArr.push(Math.floor(Math.random() * 20))
+    }
+    return numberArr
+  }
+
+  const winningNumbers = randomNumberGenerator()
+
+  const result = numbers.filter(element => winningNumbers.includes(element));
+
+  if (result.length === 6) {
+    res.send('Wow. You could have won the mega millions!')
+  }
+
+  else if (result.length === 5) {
+    res.send('Congrats. You win $100!')
+  }
+
+  else if (result.length === 4) {
+    res.send('Congrats. You win a free ticket!')
+  }
+
+  res.send(`Sorry, you lose. You only matched ${result.length}`)
+})
+
 app.listen(8000, () => {
   console.log('Express server is listening on port 8000!');
 });
